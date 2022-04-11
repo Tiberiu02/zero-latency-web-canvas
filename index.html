@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zero latency demo</title>
+  </head>
+  <body style="margin: 0; overflow: hidden; touch-action: none; cursor:crosshair">
+    
+    <div style="position: absolute; top: 0px; left: 0px; padding: 20px; background-color: #DDD; border-bottom-right-radius: 10px;">
+      Zero latency mode  <button id="modeToggler" style="margin-left: 10px; padding: 2px; width: 50px" onclick="toggleMode()">ON</button>
+    </div>
+
+    <script>
+
+      var canvas, ctx
+      var zeroLatency = true
+
+      function toggleMode() {
+        zeroLatency = !zeroLatency
+        document.getElementById('modeToggler').innerHTML = zeroLatency ? 'ON' : 'OFF'
+        initCanvas()
+      }
+
+      function initCanvas() {
+        if (canvas)
+          canvas.remove()
+
+        canvas = document.createElement('canvas')
+        document.body.append(canvas)
+        canvas.width = document.documentElement.clientWidth
+        canvas.height = document.documentElement.clientHeight
+
+        if (zeroLatency) {
+          ctx = canvas.getContext('2d', { desynchronized: true, alpha: false })
+
+          ctx.fillStyle = '#fff'
+          ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+          if (!ctx.getContextAttributes || !ctx.getContextAttributes().desynchronized)
+            alert('Low latency canvas not supported. Sorry!')
+        } else
+          ctx = canvas.getContext('2d')
+      }
+
+      window.addEventListener('pointerdown', handlePointerEvent, true)
+      window.addEventListener('pointerup', handlePointerEvent, true)
+      window.addEventListener('pointermove', handlePointerEvent, true)
+      window.addEventListener('load', initCanvas)
+      window.addEventListener('resize', initCanvas)
+
+      var last = undefined
+      function handlePointerEvent(e) {
+        e.preventDefault()
+
+        if (!e.pressure) {
+          last = undefined
+          return
+        }
+
+        if (last) {
+          let r = 3 * e.pressure
+          ctx.beginPath()
+          ctx.moveTo(last.x, last.y)
+          ctx.lineTo(e.clientX, e.clientY)
+          ctx.lineWidth = r * 2
+          ctx.lineCap = 'round'
+          ctx.stroke()
+          
+          ctx.beginPath()
+          ctx.arc(last.x, last.y, r * 1.2, 0, 2 * Math.PI)
+          ctx.arc(e.clientX, e.clientY, r * 1.2, 0, 2 * Math.PI)
+          ctx.fillStyle = '#f00'
+          ctx.fill()
+        } else {
+          ctx.fillStyle = '#fff'
+          ctx.fillRect(0, 0, canvas.width, canvas.height)
+        }
+
+        last = { x: e.clientX, y: e.clientY, pressure: e.pressure }
+      }
+
+    </script>
+  </body>
+</html>
