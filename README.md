@@ -6,7 +6,7 @@ Use a web browser that doesn't hide the pointer for best visual impact.
 
 # Details
 
-The result is achived using the desynchronized hint, explained by Joe Medley in [this](https://developer.chrome.com/blog/desynchronized/) Chrome blog.
+The result is achived using the desynchronized hint, explained by Joe Medley in [this](https://developer.chrome.com/blog/desynchronized/) Chrome blog, and documented in more detail [here](https://docs.google.com/document/d/1-Z_dj9AQ4SjgDLAEY3ELR0YrlHR3JZyJPhaHAstS5WU/edit).
 
 Supported browsers: Chrome, Edge, Opera
 

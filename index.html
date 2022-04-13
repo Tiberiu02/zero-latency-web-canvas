@@ -26,8 +26,8 @@
 
         canvas = document.createElement('canvas')
         document.body.append(canvas)
-        canvas.width = document.documentElement.clientWidth
-        canvas.height = document.documentElement.clientHeight
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
 
         if (zeroLatency) {
           ctx = canvas.getContext('2d', { desynchronized: true, alpha: false })
